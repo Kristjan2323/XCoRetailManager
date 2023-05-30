@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIRetailManager", "APIReta
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "XRMData", "XRMData\XRMData.sqlproj", "{45758139-2B7C-4196-8671-17AF7C443BAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XRetailManagerUI", "XRetailManagerUI\XRetailManagerUI.csproj", "{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{45758139-2B7C-4196-8671-17AF7C443BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45758139-2B7C-4196-8671-17AF7C443BAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45758139-2B7C-4196-8671-17AF7C443BAD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
