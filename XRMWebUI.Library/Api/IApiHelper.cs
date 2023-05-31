@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using XRetailManagerUI.Models;
+using XRMWebUI.Library.Api.Models;
 
-namespace XRetailManagerUI.Helpers
+namespace XRMWebUI.Library.Api
 {
     public interface IApiHelper
     {

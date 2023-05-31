@@ -6,15 +6,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
-using XRetailManagerUI.Models;
+using XRMWebUI.Library.Api.Models;
+using XRMWebUI.Library.Models;
 
-namespace XRetailManagerUI.Helpers
+namespace XRMWebUI.Library.Api
 {
     public class ApiHelper : IApiHelper
     {
-
+       //  private static readonly Lazy<LoggedInUser> userloged = new Lazy<LoggedInUser>(() => new LoggedInUser());
         private static readonly Lazy<ApiHelper> instance = new Lazy<ApiHelper>(() => new ApiHelper());
-
+      //  private  ILoggedInUser _loggedInUser;
         public static ApiHelper Instance => instance.Value;
 
         private HttpClient apiClient;
@@ -22,6 +23,7 @@ namespace XRetailManagerUI.Helpers
         private ApiHelper()
         {
             InitializeClient();
+         
         }
         private void InitializeClient()
         {
@@ -40,7 +42,7 @@ namespace XRetailManagerUI.Helpers
                 new KeyValuePair<string,string>("username", username),
                 new KeyValuePair<string,string>("password",password)
             });
-
+            
             try
             {
                 using (HttpResponseMessage response = await apiClient.PostAsync("/Token", data))
@@ -62,6 +64,30 @@ namespace XRetailManagerUI.Helpers
                 var errorResult = new AuthenticateUser { Error = ex.Message };
                 return errorResult;
 
+            }
+        }
+
+        public async Task GetUserDetail(string token)
+        {
+            apiClient.DefaultRequestHeaders.Clear();
+            apiClient.DefaultRequestHeaders.Accept.Clear();
+            apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            using (HttpResponseMessage response = await apiClient.GetAsync("api/User"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<LoggedInUser>();
+                    ILoggedInUser _loggedInUser = new LoggedInUser();
+                    _loggedInUser.CreatedDate = result.CreatedDate;
+                    _loggedInUser.EmailAddress = result.EmailAddress;
+                    _loggedInUser.AuthUserId = result.AuthUserId;   
+                    _loggedInUser.FirstName = result.FirstName; 
+                    _loggedInUser.LastName = result.LastName;   
+                    _loggedInUser.Token = token;
+                    ///ToDo : make a singelton for logged in user object
+                }
             }
         }
     }

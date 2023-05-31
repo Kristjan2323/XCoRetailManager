@@ -9,6 +9,10 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "XRMData", "XRMData\XRMData.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XRetailManagerUI", "XRetailManagerUI\XRetailManagerUI.csproj", "{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XRMDataManager.Library", "XRMDataManager.Library\XRMDataManager.Library.csproj", "{5A78440A-8482-4C2F-8BC8-1B222E2C8505}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XRMWebUI.Library", "XRMWebUI.Library\XRMWebUI.Library.csproj", "{7C347EAE-0A02-4611-8758-0BDFFC4647A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,14 @@ Global
 		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C22792B-FD6A-4FF2-B518-1C26BFD6136A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A78440A-8482-4C2F-8BC8-1B222E2C8505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A78440A-8482-4C2F-8BC8-1B222E2C8505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A78440A-8482-4C2F-8BC8-1B222E2C8505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A78440A-8482-4C2F-8BC8-1B222E2C8505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C347EAE-0A02-4611-8758-0BDFFC4647A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C347EAE-0A02-4611-8758-0BDFFC4647A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C347EAE-0A02-4611-8758-0BDFFC4647A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C347EAE-0A02-4611-8758-0BDFFC4647A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

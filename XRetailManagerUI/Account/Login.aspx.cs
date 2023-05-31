@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using XRetailManagerUI.Helpers;
+using XRMWebUI.Library.Api;
 
 namespace XRetailManagerUI.Account
 {
@@ -24,7 +24,10 @@ namespace XRetailManagerUI.Account
             if ((result.Access_Token == null && result.Username == null) && !string.IsNullOrEmpty(result.Error))
             {
                 lblLoginValidation.Text = $"Ann error occured: {result.Error}.";
+                return;
             }
+
+            await api.GetUserDetail(result.Access_Token);
           
         }
     }
