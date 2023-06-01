@@ -25,6 +25,14 @@ namespace XRMWebUI.Library.Api
             InitializeClient();
          
         }
+
+        public HttpClient ApiClient
+        {
+            get
+            {
+                return apiClient;
+            }
+        }
         private void InitializeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];
@@ -87,6 +95,22 @@ namespace XRMWebUI.Library.Api
                     _loggedInUser.LastName = result.LastName;   
                     _loggedInUser.Token = token;
                     ///ToDo : make a singelton for logged in user object
+                }
+            }
+        }
+
+        public async Task<List<ProductModel>> GetAllProducts()
+        {
+            using (HttpResponseMessage response = await apiClient.GetAsync("api/Product"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProductModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
                 }
             }
         }
