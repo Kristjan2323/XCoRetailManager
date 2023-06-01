@@ -14,4 +14,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PurchaseDate" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="d40c04e0-efec-46ff-bcf8-21de0cacc04b" ChangeDateTime="06/01/2023 09:08:28">
+    <Property Name="ElementName" Value="[dbo].[FK_User_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_User_ToAspNetUser]" />
+  </Operation>
 </Operations>
