@@ -6,13 +6,15 @@
             <div class="row">
                 <div class="col-md-4">
                     <h2>Items for Sale</h2>
-                    <asp:ListBox ID="lstItems" runat="server" CssClass="form-control"></asp:ListBox>
+                    <asp:ListBox ID="lstProducts" runat="server" AutoPostBack="true" CssClass="form-control" OnSelectedIndexChanged="lstProducts_SelectedIndexChanged" ></asp:ListBox>
                 </div>
                 <div class="col-md-4">
                     <h2>Add to Cart</h2>
                     <br />
+                       <asp:Label ID="lblQuantityValidation" runat="server" ForeColor="Red" />
+                       <br />
                     <label>Quantity</label>
-                    <asp:TextBox ID="txtQuantity" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:TextBox ID="txtQuantity" type="number" value="1" runat="server" CssClass="form-control"></asp:TextBox>
                     <br />
                     <asp:Button ID="btnAddToCart" runat="server" Text="Add to Cart" OnClick="btnAddToCart_Click" CssClass="btn btn-primary" />
                     <br />

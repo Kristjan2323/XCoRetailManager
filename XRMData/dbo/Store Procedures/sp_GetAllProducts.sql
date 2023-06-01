@@ -2,6 +2,6 @@
 
 AS
 begin
-	select Id, ProductName, [Description], [RetailPrice]
+	select Id, ProductName, [Description], [RetailPrice], QuantityInStock, IsTaxable
 	from [Product]
 end
