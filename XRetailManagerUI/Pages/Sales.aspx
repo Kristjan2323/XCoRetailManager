@@ -5,11 +5,27 @@
         <div class="container" style="margin-top:30px">
             <div class="row">
                 <div class="col-md-4">
-                    <h2>Items for Sale</h2>
-                    <asp:ListBox ID="lstProducts" runat="server" AutoPostBack="true" CssClass="form-control" OnSelectedIndexChanged="lstProducts_SelectedIndexChanged" ></asp:ListBox>
-                </div>
+                               <h2>Items for Sale</h2>
+            <div style="height: 600px; overflow-y: scroll;">
+                <asp:Repeater ID="lstProducts" runat="server" OnItemCommand="lstProducts_ItemCommand" >
+                    <ItemTemplate>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title"><%# Eval("ProductName") %></h4>
+                                <p class="card-text">Description: <%# Eval("Description") %></p>
+                                <p class="card-text">Quantity: <%# Eval("QuantityInStock") %></p>
+                                <asp:Button ID="btnAddToCart" runat="server" Text="Select Item" CommandName="AddToCart" CommandArgument='<%# Eval("ID") %>' CssClass="btn btn-success" />
+                            </div>
+                        </div>
+                        <hr />
+                    </ItemTemplate>
+                </asp:Repeater>
+            </div>
+        </div>
                 <div class="col-md-4">
                     <h2>Add to Cart</h2>
+                     <asp:Label ID="lblSelectedItem" runat="server" ForeColor="Green" />
+                       <asp:Button ID="btnRemoveSelectedItem" Text="X" runat="server" ForeColor="Red" Visible="false" OnClick="btnRemoveSelectedItem_Click" />
                     <br />
                        <asp:Label ID="lblQuantityValidation" runat="server" ForeColor="Red" />
                        <br />

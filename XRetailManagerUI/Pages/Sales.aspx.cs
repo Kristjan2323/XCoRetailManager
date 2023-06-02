@@ -17,6 +17,7 @@ namespace XRetailManagerUI.Pages
     {
         ApiHelper api = ApiHelper.Instance;
        static List<CartItemModel> cartProducts = new List<CartItemModel>();
+        static ProductModel selectedProductStatic = new ProductModel();
         protected async void Page_Load(object sender, EventArgs e)
         {
             
@@ -34,8 +35,8 @@ namespace XRetailManagerUI.Pages
                List<ProductModel> productList = await api.GetAllProducts();
 
                 lstProducts.DataSource = productList;
-                lstProducts.DataTextField = "ProductName";
-                lstProducts.DataValueField = "Id";
+                //lstProducts.DataTextField = "ProductName";
+                //lstProducts.DataValueField = "Id";
                 lstProducts.DataBind();
             }
             catch (Exception)
@@ -90,14 +91,14 @@ namespace XRetailManagerUI.Pages
          return subtotal;
         }
         
-        private async Task<bool> IsItemInCart()
+        private bool IsItemInCart()
         {
             bool isItemInCart = false;
-            var selectedItem = await GetSelectedProduct();
+         //   var selectedItem = await GetSelectedProduct();
             var cartItems = cartProducts;
             foreach(var items in cartItems)
             {
-                if(items.Product.Id == selectedItem.Id)
+                if(items.Product.Id == selectedProductStatic.Id)
                 {
                     isItemInCart = true;
                 }
@@ -105,7 +106,7 @@ namespace XRetailManagerUI.Pages
             return  isItemInCart;    
         }
 
-        private async Task UpdateExistingItemInCart(CartItemModel cartItem)
+        private void UpdateExistingItemInCart(CartItemModel cartItem)
         {
             try
             {
@@ -113,10 +114,10 @@ namespace XRetailManagerUI.Pages
 
                 if (getSameItemFromCart != null)
                 {
-                    var selectedItem = await GetSelectedProduct();
+                 //   var selectedItem = await GetSelectedProduct();
                     CartItemModel updateCartItem = new CartItemModel();
                     int updatedQuantity = getSameItemFromCart.QuantityInCard + Convert.ToInt32(txtQuantity.Text);
-                    if (selectedItem.QuantityInStock >= updatedQuantity)
+                    if (selectedProductStatic.QuantityInStock >= updatedQuantity)
                     {
                         updateCartItem = cartItem;
                         updateCartItem.QuantityInCard = updatedQuantity;
@@ -145,17 +146,17 @@ namespace XRetailManagerUI.Pages
                 lstCart.DataBind();
             }
         }
-        public async  Task<string> ValidateQuantityEnter()
+        public string ValidateQuantityEnter()
         {
             string output = "";
             lblQuantityValidation.Text = "";
-            var selectedItem = await GetSelectedProduct();
-            if(selectedItem == null)
+          //  var selectedItem = await GetSelectedProduct();
+            if(selectedProductStatic.Id == 0)
             {
                 output = "You should select a product from Items for Sale.";
                 return output;
             }
-            int quantityInStock = selectedItem.QuantityInStock;
+            int quantityInStock = selectedProductStatic.QuantityInStock;
             bool isQuantityValid = int.TryParse(txtQuantity.Text, out int quantity);
 
             if (string.IsNullOrEmpty(txtQuantity.Text))
@@ -187,19 +188,19 @@ namespace XRetailManagerUI.Pages
             return output;
 
         }
-        protected async void btnAddToCart_Click(object sender, EventArgs e)
+        protected  void btnAddToCart_Click(object sender, EventArgs e)
         {
-            if (await ValidateQuantityEnter() == "")
+            if ( ValidateQuantityEnter() == "")
             {
                 CartItemModel cartItem = new CartItemModel();
-                var selectedItem = await GetSelectedProduct();
-                cartItem.Product = selectedItem;
+               // var selectedItem = await GetSelectedProduct();
+                cartItem.Product = selectedProductStatic;
                 cartItem.QuantityInCard = Convert.ToInt32(txtQuantity.Text);
                
-                if(await IsItemInCart())
+                if( IsItemInCart())
                 {   
                     
-                 await UpdateExistingItemInCart(cartItem);  
+                  UpdateExistingItemInCart(cartItem);  
                     
                 }
                 else
@@ -211,31 +212,63 @@ namespace XRetailManagerUI.Pages
             }
             else
             {
-                lblQuantityValidation.Text = await ValidateQuantityEnter();
+                lblQuantityValidation.Text =  ValidateQuantityEnter();
                 lblQuantityValidation.ForeColor = Color.Red;
             }
         }
 
-        private async Task<ProductModel> GetSelectedProduct( )
+        private async Task GetSelectedProduct( int productId)
         {
-            if (lstProducts.SelectedItem != null)
+            try
             {
-                int selectedProductId = Convert.ToInt32(lstProducts.SelectedItem.Value);
-                List<ProductModel> productlist = await api.GetAllProducts();
-                ProductModel selectedProduct = productlist.Where(p => p.Id == selectedProductId).FirstOrDefault();
-                return selectedProduct; 
+                if (productId != 0)
+                {
+
+                    List<ProductModel> productlist = await api.GetAllProducts();
+                    ProductModel selectedProduct = productlist.Where(p => p.Id == productId).FirstOrDefault();
+                    selectedProductStatic = new ProductModel();
+                    lblSelectedItem.Text = "";
+                    selectedProductStatic = selectedProduct;
+                    lblSelectedItem.Text = $"Selected item: {selectedProductStatic.ProductName}";
+                    btnRemoveSelectedItem.Visible = true;
+                }
+                else
+                {
+                    throw new Exception("No item found");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+
+               lblQuantityValidation.Text = ex.Message;
             }
         }
-        protected async  void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
-        {
-          //  int selectedProductId = Convert.ToInt32(lstProducts.SelectedItem.Value);
-             await  GetSelectedProduct();
-            // Find the corresponding ProductModel object based on the selected value
+        //protected async  void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //  //  int selectedProductId = Convert.ToInt32(lstProducts.SelectedItem.Value);
+        //     await  GetSelectedProduct();
+        //    // Find the corresponding ProductModel object based on the selected value
 
+        //}
+
+        protected async void lstProducts_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if(e.CommandName == "AddToCart")
+            {
+                lblQuantityValidation.Text = "";
+                string selectedProductId = e.CommandArgument.ToString();
+                int productId = Convert.ToInt32(selectedProductId);
+                await GetSelectedProduct(productId);
+            }
+        }
+
+
+        protected void btnRemoveSelectedItem_Click(object sender, EventArgs e)
+        {
+            selectedProductStatic = new ProductModel();
+            lblSelectedItem.Text = "";
+            lblQuantityValidation.Text = "";
+            btnRemoveSelectedItem.Visible = false;
         }
     }
 }
