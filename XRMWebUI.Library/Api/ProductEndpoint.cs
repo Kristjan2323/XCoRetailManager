@@ -12,15 +12,13 @@ namespace XRMWebUI.Library.Api
     {
 
         private IApiHelper _apiHelper;
-        public ProductEndpoint(IApiHelper apiHelper)
-        {
-            _apiHelper = apiHelper;
-        }
+        ApiHelper api = ApiHelper.Instance;
+
         public async Task<List<ProductModel>> GetAllProducts()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("api/Product"))
+            using (HttpResponseMessage response = await api.ApiClient.GetAsync("api/Product"))
             {
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<List<ProductModel>>();
                     return result;

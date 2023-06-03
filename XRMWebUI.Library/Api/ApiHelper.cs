@@ -13,17 +13,17 @@ namespace XRMWebUI.Library.Api
 {
     public class ApiHelper : IApiHelper
     {
-       //  private static readonly Lazy<LoggedInUser> userloged = new Lazy<LoggedInUser>(() => new LoggedInUser());
+        //  private static readonly Lazy<LoggedInUser> userloged = new Lazy<LoggedInUser>(() => new LoggedInUser());
         private static readonly Lazy<ApiHelper> instance = new Lazy<ApiHelper>(() => new ApiHelper());
-      //  private  ILoggedInUser _loggedInUser;
+     
         public static ApiHelper Instance => instance.Value;
 
         private HttpClient apiClient;
 
-        private ApiHelper()
+        public ApiHelper()
         {
             InitializeClient();
-         
+
         }
 
         public HttpClient ApiClient
@@ -50,7 +50,7 @@ namespace XRMWebUI.Library.Api
                 new KeyValuePair<string,string>("username", username),
                 new KeyValuePair<string,string>("password",password)
             });
-            
+
             try
             {
                 using (HttpResponseMessage response = await apiClient.PostAsync("/Token", data))
@@ -90,9 +90,9 @@ namespace XRMWebUI.Library.Api
                     ILoggedInUser _loggedInUser = new LoggedInUser();
                     _loggedInUser.CreatedDate = result.CreatedDate;
                     _loggedInUser.EmailAddress = result.EmailAddress;
-                    _loggedInUser.AuthUserId = result.AuthUserId;   
-                    _loggedInUser.FirstName = result.FirstName; 
-                    _loggedInUser.LastName = result.LastName;   
+                    _loggedInUser.AuthUserId = result.AuthUserId;
+                    _loggedInUser.FirstName = result.FirstName;
+                    _loggedInUser.LastName = result.LastName;
                     _loggedInUser.Token = token;
                     ///ToDo : make a singelton for logged in user object
                 }
@@ -107,6 +107,21 @@ namespace XRMWebUI.Library.Api
                 {
                     var result = await response.Content.ReadAsAsync<List<ProductModel>>();
                     return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task InsertSale(SaleModel sale)
+        {
+            using (HttpResponseMessage response = await apiClient.PostAsJsonAsync<SaleModel>("api/Sale", sale))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    //
                 }
                 else
                 {

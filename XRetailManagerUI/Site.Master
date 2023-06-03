@@ -46,14 +46,14 @@
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="/Pages/Sales">Cart</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
                     </ul>
                        <AnonymousTemplate>
                             <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="~/Account/Register">Register</a></li>
-                                <li><a runat="server" class="nav-link" href="~/Account/Login">Log in</a></li>
+                                <li><a runat="server" class="nav-link" href="/Account/Register">Register</a></li>
+                                <li><a runat="server" class="nav-link" href="/Account/Login">Log in</a></li>
                             </ul>
                         </AnonymousTemplate>
                 </div>

@@ -8,9 +8,9 @@ using XRMDataManager.Library.Models;
 
 namespace XRMDataManager.Library.Data
 {
-    public class ProductData
+    public class ProductData : IProductData
     {
-        private  ISqlDataAccess _sqlData;
+        private ISqlDataAccess _sqlData;
 
         public ProductData(ISqlDataAccess sqlData)
         {
@@ -21,6 +21,11 @@ namespace XRMDataManager.Library.Data
         {
             var result = _sqlData.LoadData<ProductModel, dynamic>("sp_GetAllProducts", new { });
             return result;
+        }
+        public ProductModel GetProductById(int productId)
+        {
+            var result = _sqlData.LoadData<ProductModel, dynamic>("sp_GetProductById", new { productId });
+            return result.FirstOrDefault();
         }
     }
 }

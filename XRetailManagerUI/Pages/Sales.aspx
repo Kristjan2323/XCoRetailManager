@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" Async="true" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Sales.aspx.cs" Inherits="XRetailManagerUI.Pages.Sales" %>
+﻿<%@ Page Title="" Language="C#" Debug="true" Async="true" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Sales.aspx.cs" Inherits="XRetailManagerUI.Pages.Sales" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <main>
          
@@ -46,6 +46,8 @@
                     <asp:Label ID="lblTax" runat="server" Text="Tax:" CssClass="font-weight-bold"></asp:Label>
                     <br />
                     <asp:Label ID="lblTotal" runat="server" Text="Total:" CssClass="font-weight-bold"></asp:Label>
+                     <br />
+                    <asp:Button ID="btnCheckOut" runat="server" Text="Check Out" OnClick="btnCheckOut_Click" CssClass="btn btn-primary" />
                 </div>
             </div>
         </div>

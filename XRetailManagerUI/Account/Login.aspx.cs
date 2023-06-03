@@ -10,11 +10,11 @@ namespace XRetailManagerUI.Account
 {
     public partial class Login : System.Web.UI.Page
     {
-        ApiHelper api = ApiHelper.Instance;
+         ApiHelper api = ApiHelper.Instance;       
         protected void Page_Load(object sender, EventArgs e)
         {
 
-        }
+        }    
 
         protected async void LogIn_Click(object sender, EventArgs e)
         {

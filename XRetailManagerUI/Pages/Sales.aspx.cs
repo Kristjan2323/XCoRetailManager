@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.DynamicData;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using XRMWebUI.Library.Api;
@@ -16,8 +17,11 @@ namespace XRetailManagerUI.Pages
     public partial class Sales : System.Web.UI.Page
     {
         ApiHelper api = ApiHelper.Instance;
+        ProductEndpoint pEnd = new ProductEndpoint();
        static List<CartItemModel> cartProducts = new List<CartItemModel>();
         static ProductModel selectedProductStatic = new ProductModel();
+
+
         protected async void Page_Load(object sender, EventArgs e)
         {
             
@@ -27,12 +31,13 @@ namespace XRetailManagerUI.Pages
                 await LoadProducts();
             }
         }
-       
+
+    
         private async Task LoadProducts()
         {
             try
             {
-               List<ProductModel> productList = await api.GetAllProducts();
+               List<ProductModel> productList = await pEnd.GetAllProducts();
 
                 lstProducts.DataSource = productList;
                 //lstProducts.DataTextField = "ProductName";
@@ -142,7 +147,7 @@ namespace XRetailManagerUI.Pages
             if (cartProducts.Count > 0)
             {
                 lstCart.DataSource = cartProducts;
-                lstCart.DataTextField = "DisplayText";
+                lstCart.DataTextField = "DisplayText";               
                 lstCart.DataBind();
             }
         }
@@ -223,7 +228,6 @@ namespace XRetailManagerUI.Pages
             {
                 if (productId != 0)
                 {
-
                     List<ProductModel> productlist = await api.GetAllProducts();
                     ProductModel selectedProduct = productlist.Where(p => p.Id == productId).FirstOrDefault();
                     selectedProductStatic = new ProductModel();
@@ -269,6 +273,26 @@ namespace XRetailManagerUI.Pages
             lblSelectedItem.Text = "";
             lblQuantityValidation.Text = "";
             btnRemoveSelectedItem.Visible = false;
+        }
+
+        protected async void btnCheckOut_Click(object sender, EventArgs e)
+        {
+            // sale detail model complited
+            SaleModel sale = new SaleModel();
+            List<CartItemModel> itemsInCart = cartProducts;
+
+           foreach(CartItemModel cartItem in itemsInCart)
+            {
+                sale.SaleDetails.Add( new SaleDetailsModel
+                {
+                    ProductId = cartItem.Product.Id,
+                    Quantity = cartItem.QuantityInCard
+                                  
+                });
+              
+            }
+          
+           await api.InsertSale(sale);
         }
     }
 }
