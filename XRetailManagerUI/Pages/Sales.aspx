@@ -39,6 +39,10 @@
                 </div>
                 <div class="col-md-4">
                     <h2>Cart</h2>
+                      <%-- <asp:Label ID="lblCartItems" runat="server" ForeColor="Green" />--%>
+                       <asp:Button ID="btnRemoveAllItemsFromCart" Text="X Remove All Cart Items" runat="server" class="btn btn-outline-danger" Visible="false" OnClick="btnRemoveAllItemsFromCart_Click" />
+                    <br />
+                    <br />
                     <asp:ListBox ID="lstCart" runat="server" CssClass="form-control"></asp:ListBox>
                     <br />
                     <asp:Label ID="lblSubTotal" runat="server" Text="SubTotal:" CssClass="font-weight-bold"></asp:Label>

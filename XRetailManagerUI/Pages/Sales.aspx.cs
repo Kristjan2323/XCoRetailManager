@@ -17,9 +17,10 @@ namespace XRetailManagerUI.Pages
     public partial class Sales : System.Web.UI.Page
     {
         ApiHelper api = ApiHelper.Instance;
-        ProductEndpoint pEnd = new ProductEndpoint();
+        ProductEndpoint apiProduct = new ProductEndpoint();
        static List<CartItemModel> cartProducts = new List<CartItemModel>();
         static ProductModel selectedProductStatic = new ProductModel();
+        static List<ProductModel> allAvailableProducts = new List<ProductModel>();
 
 
         protected async void Page_Load(object sender, EventArgs e)
@@ -32,14 +33,33 @@ namespace XRetailManagerUI.Pages
             }
         }
 
-    
+        private void LoadCart()
+        {
+            if (cartProducts.Count > 0)
+            {
+                lstCart.DataSource = cartProducts.OrderBy(c => c.Product.ProductName);
+                lstCart.DataTextField = "DisplayText";
+                lstCart.DataValueField = "Id";
+                lstCart.DataBind();
+
+                btnRemoveAllItemsFromCart.Visible = true;
+            }
+            else
+            {
+                lstCart.DataSource = cartProducts;
+                lstCart.DataBind();
+                btnRemoveAllItemsFromCart.Visible = false;
+            }
+        
+        }
         private async Task LoadProducts()
         {
             try
             {
-               List<ProductModel> productList = await pEnd.GetAllProducts();
+               List<ProductModel> productList = await apiProduct.GetAllProducts();
+                allAvailableProducts = productList;
 
-                lstProducts.DataSource = productList;
+                lstProducts.DataSource = allAvailableProducts.OrderBy(p => p.ProductName);
                 //lstProducts.DataTextField = "ProductName";
                 //lstProducts.DataValueField = "Id";
                 lstProducts.DataBind();
@@ -50,10 +70,58 @@ namespace XRetailManagerUI.Pages
                 throw;
             }
         }
-        protected void btnRemoveFromCart_Click(object sender, EventArgs e)
+
+        protected  void btnRemoveFromCart_Click(object sender, EventArgs e)
         {
+            if (lstCart.SelectedItem == null)
+            {
+                lblQuantityValidation.Text = "Select an item from Cart listbox.";
+                return;
+            }
+           
+            else
+            {
+                int cartItemId = Convert.ToInt32(lstCart.SelectedItem.Value);
+                CartItemModel selectedCartItem = cartProducts.Where(c => c.Id == cartItemId).FirstOrDefault();
+               
+                if (selectedCartItem != null)
+                {
+                    selectedCartItem.QuantityInCard -= 1;
+
+                    var selectedAvailableProduct = allAvailableProducts.Where(p => p.Id ==  cartItemId).FirstOrDefault();    
+                    if(selectedAvailableProduct != null)
+                    {
+                        selectedAvailableProduct.QuantityInStock += 1;
+                        lstProducts.DataSource = allAvailableProducts;
+                        lstProducts.DataBind();
+                    }
+                  
+                }
+                if (selectedCartItem.QuantityInCard == 0)
+                {
+                    cartProducts.Remove(selectedCartItem);
+                }
+                LoadCart();
+                Display_SubTotal_Tax_Total();
+            }
+        }
+
+        private void SyncronizeQuantityValue()
+        {
+            if (selectedProductStatic.QuantityInStock > 0)
+            {
+                int itemQuantity = Convert.ToInt32(txtQuantity.Text);
+                selectedProductStatic.QuantityInStock -= itemQuantity;
+                var selectedProductInList = allAvailableProducts.Where(x => x.Id == selectedProductStatic.Id).FirstOrDefault();
+                selectedProductInList.QuantityInStock -= itemQuantity;
+                lstProducts.DataSource = allAvailableProducts.OrderBy(p => p.ProductName);
+                lstCart.DataValueField = "Id";
+                lstProducts.DataBind();
+            }
 
         }
+
+
         private decimal CalculateTotal()
         {
             decimal total = CalculateSubTotal() + CalculateTask();
@@ -121,8 +189,9 @@ namespace XRetailManagerUI.Pages
                 {
                  //   var selectedItem = await GetSelectedProduct();
                     CartItemModel updateCartItem = new CartItemModel();
-                    int updatedQuantity = getSameItemFromCart.QuantityInCard + Convert.ToInt32(txtQuantity.Text);
-                    if (selectedProductStatic.QuantityInStock >= updatedQuantity)
+                    int selectedQuantity = Convert.ToInt32(txtQuantity.Text);
+                    int updatedQuantity = getSameItemFromCart.QuantityInCard + selectedQuantity;
+                    if (getSameItemFromCart.QuantityInCard != 0 && selectedQuantity <= getSameItemFromCart.QuantityInCard)
                     {
                         updateCartItem = cartItem;
                         updateCartItem.QuantityInCard = updatedQuantity;
@@ -141,16 +210,7 @@ namespace XRetailManagerUI.Pages
             }          
         }
 
-        private void LoadCart()
-        {
-
-            if (cartProducts.Count > 0)
-            {
-                lstCart.DataSource = cartProducts;
-                lstCart.DataTextField = "DisplayText";               
-                lstCart.DataBind();
-            }
-        }
+   
         public string ValidateQuantityEnter()
         {
             string output = "";
@@ -212,6 +272,7 @@ namespace XRetailManagerUI.Pages
                 {
                     cartProducts.Add(cartItem);
                 }
+                SyncronizeQuantityValue();
                 Display_SubTotal_Tax_Total();
                 LoadCart(); 
             }
@@ -247,13 +308,7 @@ namespace XRetailManagerUI.Pages
                lblQuantityValidation.Text = ex.Message;
             }
         }
-        //protected async  void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //  //  int selectedProductId = Convert.ToInt32(lstProducts.SelectedItem.Value);
-        //     await  GetSelectedProduct();
-        //    // Find the corresponding ProductModel object based on the selected value
 
-        //}
 
         protected async void lstProducts_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
@@ -293,6 +348,20 @@ namespace XRetailManagerUI.Pages
             }
           
            await api.InsertSale(sale);
+        }
+
+        protected async void btnRemoveAllItemsFromCart_Click(object sender, EventArgs e)
+        {
+            cartProducts = new List<CartItemModel>();
+
+            lblSubTotal.Text = "SubTotal: 0£";
+            lblTax.Text = "Tax: 0£";
+            lblTotal.Text = "Total: 0£";
+            allAvailableProducts = await apiProduct.GetAllProducts();
+            LoadCart();
+            await LoadProducts();
+
+
         }
     }
 }

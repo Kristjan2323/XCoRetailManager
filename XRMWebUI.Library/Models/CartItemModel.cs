@@ -8,6 +8,7 @@ namespace XRMWebUI.Library.Models
 {
     public class CartItemModel
     {
+       // public int Id { get; set; } 
         public ProductModel Product { get; set; } = new ProductModel(); 
         public int QuantityInCard { get; set; }
 
@@ -16,6 +17,14 @@ namespace XRMWebUI.Library.Models
             get
             {
                 return $" {Product.ProductName} ({QuantityInCard})";
+            }
+        }
+
+        public int Id
+        {
+            get
+            {
+              return   Product.Id;
             }
         }
     }
