@@ -12,7 +12,7 @@ using XRMDataManager.Library.Models;
 
 namespace APIRetailManager.Controllers
 {
-     [Authorize]
+    // [Authorize]
     [RoutePrefix("api/Sale")]
     public class SaleController : ApiController
     {

@@ -19,13 +19,32 @@ namespace XRMDataManager.Library.Data
 
         public List<ProductModel> GetAllProducts()
         {
-            var result = _sqlData.LoadData<ProductModel, dynamic>("sp_GetAllProducts", new { });
-            return result;
+            try
+            {
+                var result = _sqlData.LoadDataInTransaction<ProductModel, dynamic>("sp_GetAllProducts", new { });
+                _sqlData.CommitTransaction();
+                return result;
+              
+            }
+            catch (Exception ex)
+            {
+                _sqlData.RollbackTransaction();
+                throw;
+            }
         }
         public ProductModel GetProductById(int productId)
         {
-            var result = _sqlData.LoadData<ProductModel, dynamic>("sp_GetProductById", new { productId });
-            return result.FirstOrDefault();
+            try
+            {
+                var result = _sqlData.LoadDataInTransaction<ProductModel, dynamic>("sp_GetProductById", new { productId });
+                _sqlData.CommitTransaction();
+                return result.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _sqlData.RollbackTransaction();
+                throw;
+            }
         }
     }
 }

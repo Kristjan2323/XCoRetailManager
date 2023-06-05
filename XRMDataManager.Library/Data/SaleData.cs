@@ -41,32 +41,50 @@ namespace XRMDataManager.Library.Data
 
             saleDbModel.Total = saleDbModel.SubTotal + saleDbModel.Tax;
 
-            var p = new DynamicParameters();
-            p.Add("@CashierId", userId);
-            p.Add("@SaleDate", saleDbModel.SaleDate);
-            p.Add("@SubTotal", saleDbModel.SubTotal);
-            p.Add("@Tax", saleDbModel.Tax);
-            p.Add("@Total", saleDbModel.Total);
-            p.Add("Id",dbType:DbType.Int32, direction:ParameterDirection.Output);
-            _sqlDataAccess.SaveData("sp_InsertSale", p);
-
-            //get sale id model
-            int saleId = p.Get<int>("Id");
-
-            //populate sale detail model 
-            foreach (var saleItem in  sale.SaleDetails)
+            try
             {
-                var saleProduct = _productData.GetProductById(saleItem.ProductId);
-                SaleDetailDbModel saleDetailDbModel = new SaleDetailDbModel
+              
+                var p = new DynamicParameters();
+                p.Add("@CashierId", userId);
+                p.Add("@SaleDate", saleDbModel.SaleDate);
+                p.Add("@SubTotal", saleDbModel.SubTotal);
+                p.Add("@Tax", saleDbModel.Tax);
+                p.Add("@Total", saleDbModel.Total);
+                p.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                _sqlDataAccess.SaveDataInTransiction("sp_InsertSale", p);
+
+                //get sale id model
+                int saleId = p.Get<int>("Id");
+
+                //populate sale detail model 
+                foreach (var saleItem in sale.SaleDetails)
                 {
-                    SaleId = saleId,
-                    ProductId = saleItem.ProductId,
-                    Quantity = saleItem.Quantity,
-                    PurchasePrice = saleProduct.RetailPrice,
-                    Tax = saleProduct.RetailPrice * saleItem.Quantity * taxAmount
+                    var saleProduct = _productData.GetProductById(saleItem.ProductId);
+                    SaleDetailDbModel saleDetailDbModel = new SaleDetailDbModel
+                    {
+                        SaleId = saleId,
+                        ProductId = saleItem.ProductId,
+                        Quantity = saleItem.Quantity,
+                        PurchasePrice = saleProduct.RetailPrice,
+                        Tax = saleProduct.RetailPrice * saleItem.Quantity * taxAmount
                     };
-                _sqlDataAccess.LoadData<SaleDetailDbModel, dynamic>("sp_InsertSaleDetails", new { saleDetailDbModel .SaleId, 
-                    saleDetailDbModel.ProductId, saleDetailDbModel.Quantity, saleDetailDbModel.PurchasePrice,saleDetailDbModel.Tax });
+                    _sqlDataAccess.SaveDataInTransiction("sp_InsertSaleDetails", new
+                    {
+                        saleDetailDbModel.SaleId,
+                        saleDetailDbModel.ProductId,
+                        saleDetailDbModel.Quantity,
+                        saleDetailDbModel.PurchasePrice,
+                        saleDetailDbModel.Tax
+                    });
+                }
+
+                _sqlDataAccess.CommitTransaction();
+               // _sqlDataAccess.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _sqlDataAccess.RollbackTransaction();
+                throw;
             }
 
         
