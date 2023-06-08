@@ -10,17 +10,22 @@ namespace XRMDataManager.Library.Data
 {
     public class InventoryData
     {
-        private readonly ISqlDataAccess _sqlData;
-
-        public InventoryData(ISqlDataAccess sqlData)
+        private static ISqlDataAccess _sqlData;
+        IProductData _productData;
+        public InventoryData(ISqlDataAccess sqlData,IProductData productData)
         {
             _sqlData = sqlData;
+            _productData = productData;
         }
 
         public List<InventoryModel> GetInventory()
         {
-            var result =  _sqlData.LoadData<InventoryModel, dynamic>("sp_GetInventory", new { });
-            return result;
+            var allInevories =  _sqlData.LoadData<InventoryModel, dynamic>("sp_GetInventory", new { });
+            foreach(var item in allInevories)
+            {
+                item.Product = _productData.GetProductById(item.ProductId);
+            }
+            return allInevories;
         }
 
         public void InsertInventory(InventoryModel inventory)

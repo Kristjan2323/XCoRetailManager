@@ -209,6 +209,7 @@
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Pages\Sales.aspx" />
+    <Content Include="Pages\Inventory.aspx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -313,6 +314,13 @@
     </Compile>
     <Compile Include="Pages\Sales.aspx.designer.cs">
       <DependentUpon>Sales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Inventory.aspx.cs">
+      <DependentUpon>Inventory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Inventory.aspx.designer.cs">
+      <DependentUpon>Inventory.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

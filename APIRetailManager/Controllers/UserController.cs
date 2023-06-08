@@ -26,6 +26,9 @@ namespace APIRetailManager.Controllers
             var result = userData.GetUserByUd(userid);
             return result;
         }
+
+        //[HttpGet]
+        //public 
      
     }
 }

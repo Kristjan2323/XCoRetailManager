@@ -28,6 +28,7 @@ namespace XRetailManagerUI.Account
             }
 
             await api.GetUserDetail(result.Access_Token);
+            Response.Redirect("/Pages/Sales");
           
         }
     }

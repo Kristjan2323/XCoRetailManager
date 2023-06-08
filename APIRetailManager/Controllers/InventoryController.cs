@@ -10,15 +10,17 @@ using XRMDataManager.Library.Models;
 
 namespace APIRetailManager.Controllers
 {
-    [Authorize]
+    [Authorize (Roles ="Admin,Cashier")]
     [RoutePrefix("api/Inventory") ]
     public class InventoryController : ApiController
     {
         [HttpGet]
+       
         public List<InventoryModel> GetInventory()
         {
             ISqlDataAccess sData = new SqlDataAccess();
-            InventoryData iData = new InventoryData(sData);
+            IProductData productData = new ProductData(sData);
+            InventoryData iData = new InventoryData(sData, productData);
             var result = iData.GetInventory();
             return result;  
         }
@@ -27,7 +29,8 @@ namespace APIRetailManager.Controllers
         public void PostInventory(InventoryModel inventory)
         {
             ISqlDataAccess sData = new SqlDataAccess();
-            InventoryData iData = new InventoryData(sData);
+            IProductData productData = new ProductData(sData);
+            InventoryData iData = new InventoryData(sData, productData);
             iData.InsertInventory(inventory);
         }
 
