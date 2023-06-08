@@ -90,5 +90,11 @@ namespace XRMDataManager.Library.Data
         
         }
 
+        public List<ReportSaleModel> GetSaleReport()
+        {
+            var result = _sqlDataAccess.LoadData<ReportSaleModel, dynamic>("sp_GetSaleReport", new { });
+            return result;
+        }
+
     }
 }

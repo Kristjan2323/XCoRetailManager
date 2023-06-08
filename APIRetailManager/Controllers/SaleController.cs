@@ -16,6 +16,17 @@ namespace APIRetailManager.Controllers
     [RoutePrefix("api/Sale")]
     public class SaleController : ApiController
     {
+        [HttpGet]
+        public List<ReportSaleModel> GetSaleReport()
+        {
+            ISqlDataAccess sqlDataAccess = new SqlDataAccess();
+            IProductData productData = new ProductData(sqlDataAccess);
+            SaleData saleData = new SaleData(sqlDataAccess, productData);
+
+           var result =  saleData.GetSaleReport();
+            return result;  
+        }
+
         [HttpPost]
         public void PostSale(SaleModel sale)
         {

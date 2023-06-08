@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace XRMDataManager.Library.Internal.DatatAccess
-{
+{ 
     public class SqlDataAccess : ISqlDataAccess
     {
         private string connStringName = "DefaultConnection";
@@ -58,10 +58,12 @@ namespace XRMDataManager.Library.Internal.DatatAccess
                   commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
           
         }
+        private bool IsCommited = false;
         public void CommitTransaction()
         {
             _transaction?.Commit();
             _connection?.Close();
+            IsCommited = true;
         }
 
         public void RollbackTransaction()
@@ -72,7 +74,13 @@ namespace XRMDataManager.Library.Internal.DatatAccess
 
         public void Dispose()
         {
-            CommitTransaction();
+            if (IsCommited == false)
+            {
+                CommitTransaction(); 
+            }
+
+            _connection= null;
+            _transaction= null;
         }
     }
 }
