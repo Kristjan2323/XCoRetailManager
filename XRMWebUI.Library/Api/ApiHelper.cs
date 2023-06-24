@@ -87,13 +87,8 @@ namespace XRMWebUI.Library.Api
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<LoggedInUser>();
-                    ILoggedInUser _loggedInUser = new LoggedInUser();
-                    _loggedInUser.CreatedDate = result.CreatedDate;
-                    _loggedInUser.EmailAddress = result.EmailAddress;
-                    _loggedInUser.AuthUserId = result.AuthUserId;
-                    _loggedInUser.FirstName = result.FirstName;
-                    _loggedInUser.LastName = result.LastName;
-                    _loggedInUser.Token = token;
+                    UserModel _loggedInUser = new UserModel();
+                    _loggedInUser.SetUserInfo(result, token);
                     ///ToDo : make a singelton for logged in user object
                 }
             }

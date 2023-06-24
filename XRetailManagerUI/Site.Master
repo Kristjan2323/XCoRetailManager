@@ -52,8 +52,9 @@
                     </ul>
                        <AnonymousTemplate>
                             <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="/Account/Register">Register</a></li>
-                                <li><a runat="server" class="nav-link" href="/Account/Login">Log in</a></li>
+                                <li><a runat="server" id="btnRegister" class="nav-link" href="/Account/Register">Register</a></li>
+                                <li><a runat="server" id="btnLogin"  class="nav-link" href="/Account/Login">Log in</a></li>
+                                <li><asp:LinkButton runat="server" onClick="btnLogout_Click" id="btnLogout" class ="nav-link"  href="/Account/Login">Logout</asp:LinkButton></li>
                             </ul>
                         </AnonymousTemplate>
                 </div>

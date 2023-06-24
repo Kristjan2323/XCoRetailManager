@@ -66,7 +66,9 @@ namespace XRMDataManager.Library.Data
                         ProductId = saleItem.ProductId,
                         Quantity = saleItem.Quantity,
                         PurchasePrice = saleProduct.RetailPrice,
-                        Tax = saleProduct.RetailPrice * saleItem.Quantity * taxAmount
+
+                        Tax = saleProduct.IsTaxable ? saleProduct.RetailPrice * saleItem.Quantity * taxAmount : 0,
+
                     };
                     _sqlDataAccess.SaveDataInTransiction("sp_InsertSaleDetails", new
                     {

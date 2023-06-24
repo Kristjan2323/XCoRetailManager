@@ -52,6 +52,8 @@
                     <asp:Label ID="lblTotal" runat="server" Text="Total:" CssClass="font-weight-bold"></asp:Label>
                      <br />
                     <asp:Button ID="btnCheckOut" runat="server" Text="Check Out" OnClick="btnCheckOut_Click" CssClass="btn btn-primary" />
+                    <br />
+                    <asp:Label runat="server" ID="lblSaleReport" />
                 </div>
             </div>
         </div>

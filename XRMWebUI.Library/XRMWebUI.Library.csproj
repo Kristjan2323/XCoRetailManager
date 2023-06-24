@@ -63,6 +63,7 @@
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\SaleDetailsModel.cs" />
     <Compile Include="Models\SaleModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserRolePairModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

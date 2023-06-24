@@ -359,11 +359,21 @@ namespace XRetailManagerUI.Pages
                     ProductId = cartItem.Product.Id,
                     Quantity = cartItem.QuantityInCard
                                   
-                });
-              
+                });             
             }
-          
-           await api.InsertSale(sale);
+            try
+            {
+                await api.InsertSale(sale);
+                lblSaleReport.Text = "Item(s) bought successfuly";
+                lblSaleReport.ForeColor = Color.Green;
+            }
+            catch (Exception ex)
+            {
+
+                lblSaleReport.Text = $"An error occurs {ex.Message}";
+                lblSaleReport.ForeColor = Color.Red;
+            }
+         
         }
 
         protected async void btnRemoveAllItemsFromCart_Click(object sender, EventArgs e)
@@ -376,8 +386,6 @@ namespace XRetailManagerUI.Pages
             allAvailableProducts = await apiProduct.GetAllProducts();
             LoadCart();
             await LoadProducts();
-
-
         }
     }
 }
