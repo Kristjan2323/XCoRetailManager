@@ -53,6 +53,8 @@
     <Compile Include="Api\InventoryEndpoint.cs" />
     <Compile Include="Api\ProductEndpoint.cs" />
     <Compile Include="Api\SaleEndpoint.cs" />
+    <Compile Include="Api\UserEndpoint.cs" />
+    <Compile Include="Models\ApplicationUserModel.cs" />
     <Compile Include="Models\AuthenticateUser.cs" />
     <Compile Include="Models\CartItemModel.cs" />
     <Compile Include="Models\ILoggedInUser.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\SaleDetailsModel.cs" />
     <Compile Include="Models\SaleModel.cs" />
+    <Compile Include="Models\UserRolePairModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -21,6 +21,7 @@ namespace XRMDataManager.Library.Data
         {
             try
             {
+                _sqlData.StartTransaction();
                 var result = _sqlData.LoadDataInTransaction<ProductModel, dynamic>("sp_GetAllProducts", new { });
                 _sqlData.CommitTransaction();
                 return result;
@@ -36,8 +37,9 @@ namespace XRMDataManager.Library.Data
         {
             try
             {
+              //  _sqlData.StartTransaction();
                 var result = _sqlData.LoadDataInTransaction<ProductModel, dynamic>("sp_GetProductById", new { productId });
-                _sqlData.CommitTransaction();
+               // _sqlData.CommitTransaction();
                 return result.FirstOrDefault();
             }
             catch (Exception ex)

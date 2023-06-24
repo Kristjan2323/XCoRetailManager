@@ -20,13 +20,13 @@ namespace XRMDataManager.Library.Data
             _productData = productData; 
         }
 
-        public void InsertSale(SaleModel sale, string userId)
+        public void InsertSale(SaleModel sale, string userId, string taxAmountValue)
         {
             //populate sale model 
-            int taxAmount = 5;
+            decimal taxAmount = Convert.ToDecimal(taxAmountValue);
             SaleDbModel saleDbModel = new SaleDbModel();
-            saleDbModel.SaleDate = DateTime.UtcNow;    
-
+            saleDbModel.SaleDate = DateTime.UtcNow;
+            _sqlDataAccess.StartTransaction();
             //get product by id
             foreach(SaleDetailsModel sd in sale.SaleDetails)
             {

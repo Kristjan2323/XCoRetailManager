@@ -45,7 +45,7 @@ namespace XRMDataManager.Library.Internal.DatatAccess
 
         public void SaveDataInTransiction<T>(string storeProcedure, T parameters)
         {
-            StartTransaction();
+           // StartTransaction();
             _connection.Execute(storeProcedure, parameters,
               commandType: CommandType.StoredProcedure, transaction: _transaction);
           
@@ -53,7 +53,7 @@ namespace XRMDataManager.Library.Internal.DatatAccess
 
         public List<T> LoadDataInTransaction<T, U>(string storeProcedure, U parameters)
         {
-            StartTransaction();
+           // StartTransaction();
             return _connection.Query<T>(storeProcedure, parameters,
                   commandType: CommandType.StoredProcedure, transaction: _transaction).ToList();
           

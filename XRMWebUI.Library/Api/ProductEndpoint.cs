@@ -10,8 +10,8 @@ namespace XRMWebUI.Library.Api
 {
     public class ProductEndpoint
     {
-
-        private IApiHelper _apiHelper;
+        
+    
         ApiHelper api = ApiHelper.Instance;
 
         public async Task<List<ProductModel>> GetAllProducts()
